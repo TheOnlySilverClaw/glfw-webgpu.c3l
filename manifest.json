@@ -1,0 +1,7 @@
+{
+  "provides" : "glfw_webgpu",
+  "dependencies" : [
+    "glfw",
+    "webgpu"
+  ]
+}
