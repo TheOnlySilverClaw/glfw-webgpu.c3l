@@ -11,10 +11,18 @@ extern fn WaylandDisplay glfwGetWaylandDisplay();
 
 extern fn WaylandSurface glfwGetWaylandWindow(GlfwWindow window);
 
+fault SurfaceError {
+	PLATFORM_UNSUPPORTED
+}
 
-fn Surface createSurface(Instance instance, GlfwWindow window) {
+fn Surface! createSurface(Instance instance, GlfwWindow window) {
 
-	return createWaylandSurface(instance, window);
+	Platform platform = glfw::getPlatform();
+	switch(platform) {
+	case platform::X11: return createX11Surface(instance, window);
+	case platform::WAYLAND: return createWaylandSurface(instance, window);
+	default: return SurfaceError.PLATFORM_UNSUPPORTED?;
+	}
 }
 
 fn Surface createX11Surface(Instance instance, GlfwWindow window) {
